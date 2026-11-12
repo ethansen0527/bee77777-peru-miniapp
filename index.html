@@ -357,12 +357,12 @@
         <div class="copy-box" id="copyAdLink">https://t.me/Bee77777PeruBot/play?startapp=peru_ads</div>
         <button class="copy-btn" type="button" data-copy-target="copyAdLink">Copiar enlace</button>
       </div>
-      <p style="margin-top:10px">El enlace debe llevar siempre <span class="mono-inline">/play</span>: sin el nombre corto abre la app principal anterior, no esta MiniApp. Variantes por canal: cambia solo el código — <span class="mono-inline">https://t.me/Bee77777PeruBot/play?startapp=peru_ads_tg</span> para anuncios de Telegram, <span class="mono-inline">https://t.me/Bee77777PeruBot/play?startapp=peru_ads_fb</span> para Facebook. Reglas del código: letras, números, <span class="mono-inline">_</span> y <span class="mono-inline">-</span>, máximo 64 caracteres.</p>
+      <p style="margin-top:10px">El enlace debe llevar siempre <span class="mono-inline">/play</span>: sin el nombre corto abre la app principal anterior, no esta MiniApp. Variantes por canal: cambia solo el código — <span class="mono-inline">https://t.me/Bee77777PeruBot/play?startapp=peru_ads_tg</span> para anuncios de Telegram, <span class="mono-inline">https://t.me/Bee77777PeruBot/play?startapp=peru_ads_fb</span> para Facebook. Reglas del código: letras, números, <span class="mono-inline">_</span> y <span class="mono-inline">-</span>, máximo 512 caracteres.</p>
     </div>
 
     <div class="panel">
       <h3>2 · Cómo se lee la atribución en esta página</h3>
-      <p>Al abrirse, la página lee el código en este orden: <b>Telegram.WebApp.initDataUnsafe.start_param</b> → parámetro <b>tgWebAppStartParam</b> en la URL (query y hash, incluido dentro de <b>tgWebAppData</b>). El código se valida (solo letras, números, <span class="mono-inline">_</span>, <span class="mono-inline">-</span>; máx. 64) y, si no es válido o no llegó, se muestra «sin código». El botón «Seguir al Bot» reutiliza ese mismo código en <span class="mono-inline">?start=&lt;código&gt;</span>.</p>
+      <p>Al abrirse, la página lee el código en este orden: <b>Telegram.WebApp.initDataUnsafe.start_param</b> → parámetro <b>tgWebAppStartParam</b> en la URL (query y hash, incluido dentro de <b>tgWebAppData</b>). El código se valida (solo letras, números, <span class="mono-inline">_</span>, <span class="mono-inline">-</span>; máx. 512) y, si no es válido o no llegó, se muestra «sin código». El botón «Seguir al Bot» reutiliza ese mismo código en <span class="mono-inline">?start=&lt;código&gt;</span> cuando mide 64 caracteres o menos; si el código es más largo, el botón usa el código corto <span class="mono-inline">bot</span>, porque <span class="mono-inline">?start=</span> admite como máximo 64 caracteres.</p>
       <p><b>Importante:</b> esta página es estática — muestra y arrastra el código, pero <b>no lo guarda en ningún servidor</b>. El registro del evento en el backend sigue siendo tarea del sitio / del Bot, según la tabla siguiente.</p>
     </div>
 
@@ -443,7 +443,7 @@
   function sanitize(code){
     if (!code) return null;
     code = String(code).trim();
-    if (!/^[A-Za-z0-9_-]{1,64}$/.test(code)) return null;
+    if (!/^[A-Za-z0-9_-]{1,512}$/.test(code)) return null;
     return code;
   }
   function fromParams(params){
@@ -486,7 +486,7 @@
 
   var code = readStartParam();
   var codeLabel = code ? code : 'sin código';
-  var botCode = code ? code : 'bot';
+  var botCode = (code && code.length <= 64) ? code : 'bot';
 
   /* ---------- Visitor + timestamp ---------- */
   var visitor = 'Visitante';
